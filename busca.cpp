@@ -15,15 +15,17 @@ bool enderecoVazio(noPtr);
 void listar(noPtr);
 void printNo(noPtr);
 bool buscar(noPtr, int);
+noPtr buscarMaior(noPtr);
+noPtr buscarMenor(noPtr);
 
 int main() {
-    noPtr raiz;
+    noPtr raiz, maior, menor;
     int op, x, n, achei;
 
     raiz = NULL;
 
     do {
-        cout << "1 para inserir, 2 listar, 3 buscar: ";
+        cout << "1 para inserir, 2 listar, 3 buscar, 4 buscar maior, 5 buscar menor: ";
         cin >> op;
 
         switch (op) {
@@ -41,6 +43,14 @@ int main() {
                 achei = buscar(raiz, n);
                 if (achei) cout << "Elemento encontrado!" << endl;
                 else cout << "Elemento nao encontrado..." << endl;
+                break;
+            case 4:
+                maior = buscarMaior(raiz);
+                printNo(maior);
+                break;
+            case 5:
+                menor = buscarMenor(raiz);
+                printNo(menor);
                 break;
         }
         cout << endl;
@@ -61,6 +71,22 @@ void insere(noPtr * p, int x) {
         } else {
             insere(&(*p)->dir, x);
         }
+    }
+}
+
+noPtr buscarMaior(noPtr p) {
+    if (enderecoVazio(p->dir)) {
+        return p;
+    } else {
+        return (p->dir);
+    }
+}
+
+noPtr buscarMenor(noPtr p) {
+    if (enderecoVazio(p->esq)) {
+        return p;
+    } else {
+        return (p->esq);
     }
 }
 
