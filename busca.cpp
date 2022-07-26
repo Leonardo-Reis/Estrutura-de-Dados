@@ -40,7 +40,7 @@ int main() {
                 cin >> n;
                 achei = buscar(raiz, n);
                 if (achei) cout << "Elemento encontrado!" << endl;
-                else cout << "Elemento não encontrado..." << endl;
+                else cout << "Elemento nao encontrado..." << endl;
                 break;
         }
         cout << endl;
@@ -72,9 +72,10 @@ bool buscar(noPtr p, int n) {
     } else {
         if (p->value == n) {
             achei = true;
-        } else {
-            buscar(p->esq, n);
-            buscar(p->dir, n);
+        } else if (n < p->value) {
+            achei = buscar(p->esq, n);
+        } else if (n > p->value) {
+            achei = buscar(p->dir, n);
         }
     }
     return achei;
