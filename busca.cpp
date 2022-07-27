@@ -91,7 +91,6 @@ void remove(noPtr * p, int x) {
             if (aux->dir != NULL and aux->esq != NULL) {
                 aux = buscarMaior(aux->esq);
                 (*p)->value = aux->value;
-                delete aux;
             } else if ((aux->dir != NULL and aux->esq == NULL)) {
                 *p = (*p)->dir;
 
@@ -103,7 +102,7 @@ void remove(noPtr * p, int x) {
     } else {
         if ((*p)->value > x) {
             remove(&(*p)->dir, x);
-        } else if ((*p)->value < x) {
+        } else {
             remove(&(*p)->esq, x);
         }
     }
