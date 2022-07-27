@@ -17,7 +17,7 @@ bool enderecoVazio(noPtr);
 void listar(noPtr);
 void printNo(noPtr);
 bool buscar(noPtr, int);
-noPtr buscarMaior(noPtr);
+noPtr buscarMaior(noPtr *);
 noPtr buscarMenor(noPtr);
 void remove(noPtr *, int);
 
@@ -28,7 +28,7 @@ int main() {
     raiz = NULL;
 
     do {
-        cout << "1 para inserir, 2 listar, 3 buscar, 4 buscar maior, 5 buscar menor, 6 remove: ";
+        cout << "1 para inserir, 2 listar, 3 buscar, 4 buscar menor, 5 remove: ";
         cin >> op;
 
         switch (op) {
@@ -48,14 +48,10 @@ int main() {
                 else cout << "Elemento nao encontrado..." << endl;
                 break;
             case 4:
-                maior = buscarMaior(raiz);
-                printNo(maior);
-                break;
-            case 5:
                 menor = buscarMenor(raiz);
                 printNo(menor);
                 break;
-            case 6:
+            case 5:
                 cout << "Digite um numero: ";
                 cin >> x;
                 remove(&raiz, x);
@@ -86,42 +82,39 @@ void remove(noPtr * p, int x) {
     noPtr aux;
 
     if (!enderecoVazio(*p)) {
-        cout << "nao vazio " << (*p)->value << endl;
         if ((*p)->value == x) {
-            cout << "igual";
             aux = *p;
-            if (aux->dir != NULL and aux->esq != NULL) {
-                cout << " a ";
-                aux = buscarMaior(aux->esq);
-                printNo(aux);
-                (*p)->value = aux->value;
-            } else if ((aux->dir != NULL and aux->esq == NULL)) {
-                cout << " b ";
-                printNo(aux);
-                *p = (*p)->dir;
-
-            } else if ((aux->esq != NULL and aux->dir == NULL)) {
-                cout << " c ";
-                printNo(aux);
+            if ((*p)->dir == NULL) {
                 *p = (*p)->esq;
+            } else if ((*p)->esq == NULL) {
+                *p = (*p)->dir;
+            } else {
+                aux = buscarMaior(&(*p)->esq);
+                (*p)->value = aux->value;
             }
             delete aux;
-            cout << "\nO elemento foi removido\n";
-        } else if ((*p)->value < x) {
-            remove(&(*p)->dir, x);
         } else {
-            remove(&(*p)->esq, x);
+            if (x < (*p)->value) {
+                remove(&(*p)->esq, x);
+            } else {
+                remove(&(*p)->dir, x);
+            }
         }
     } else {
-        cout << "Vazio";
+        cout << "Vazio" << endl;
     }
 }
 
-noPtr buscarMaior(noPtr p) {
-    if (enderecoVazio(p->dir)) {
-        return p;
+noPtr buscarMaior(noPtr * p) {
+    noPtr t;
+
+    t = *p;
+
+    if (enderecoVazio((*p)->dir)) {
+        *p = (*p)->esq;
+        return t;
     } else {
-        return (p->dir);
+        return buscarMaior(&(*p)->dir);
     }
 }
 
@@ -129,7 +122,7 @@ noPtr buscarMenor(noPtr p) {
     if (enderecoVazio(p->esq)) {
         return p;
     } else {
-        return (p->esq);
+        return buscarMenor(p->esq);
     }
 }
 
@@ -161,7 +154,6 @@ void listar(noPtr p) {
         printNo(p);
         listar(p->dir);
     } else {
-        cout << "Endereco vazio" << endl;
         return;
     }
 }
