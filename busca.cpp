@@ -86,25 +86,34 @@ void remove(noPtr * p, int x) {
     noPtr aux;
 
     if (!enderecoVazio(*p)) {
-        aux = *p;
-        if (aux->value == x) {
+        cout << "nao vazio " << (*p)->value << endl;
+        if ((*p)->value == x) {
+            cout << "igual";
+            aux = *p;
             if (aux->dir != NULL and aux->esq != NULL) {
+                cout << " a ";
                 aux = buscarMaior(aux->esq);
+                printNo(aux);
                 (*p)->value = aux->value;
             } else if ((aux->dir != NULL and aux->esq == NULL)) {
+                cout << " b ";
+                printNo(aux);
                 *p = (*p)->dir;
 
             } else if ((aux->esq != NULL and aux->dir == NULL)) {
+                cout << " c ";
+                printNo(aux);
                 *p = (*p)->esq;
             }
             delete aux;
-        }
-    } else {
-        if ((*p)->value > x) {
+            cout << "\nO elemento foi removido\n";
+        } else if ((*p)->value < x) {
             remove(&(*p)->dir, x);
         } else {
             remove(&(*p)->esq, x);
         }
+    } else {
+        cout << "Vazio";
     }
 }
 
@@ -152,6 +161,7 @@ void listar(noPtr p) {
         printNo(p);
         listar(p->dir);
     } else {
+        cout << "Endereco vazio" << endl;
         return;
     }
 }
