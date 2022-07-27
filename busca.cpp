@@ -2,6 +2,8 @@
 
 using namespace std;
 
+//Árvore Binária de Busca
+
 struct no {
     struct no * esq;
     int value;
@@ -17,6 +19,7 @@ void printNo(noPtr);
 bool buscar(noPtr, int);
 noPtr buscarMaior(noPtr);
 noPtr buscarMenor(noPtr);
+void remove(noPtr *, int);
 
 int main() {
     noPtr raiz, maior, menor;
@@ -25,7 +28,7 @@ int main() {
     raiz = NULL;
 
     do {
-        cout << "1 para inserir, 2 listar, 3 buscar, 4 buscar maior, 5 buscar menor: ";
+        cout << "1 para inserir, 2 listar, 3 buscar, 4 buscar maior, 5 buscar menor, 6 remove: ";
         cin >> op;
 
         switch (op) {
@@ -52,6 +55,11 @@ int main() {
                 menor = buscarMenor(raiz);
                 printNo(menor);
                 break;
+            case 6:
+                cout << "Digite um numero: ";
+                cin >> x;
+                remove(&raiz, x);
+                break;
         }
         cout << endl;
     } while (op != 0);
@@ -70,6 +78,33 @@ void insere(noPtr * p, int x) {
             insere(&(*p)->esq, x);
         } else {
             insere(&(*p)->dir, x);
+        }
+    }
+}
+
+void remove(noPtr * p, int x) {
+    noPtr aux;
+
+    if (!enderecoVazio(*p)) {
+        aux = *p;
+        if (aux->value == x) {
+            if (aux->dir != NULL and aux->esq != NULL) {
+                aux = buscarMaior(aux->esq);
+                (*p)->value = aux->value;
+                delete aux;
+            } else if ((aux->dir != NULL and aux->esq == NULL)) {
+                *p = (*p)->dir;
+
+            } else if ((aux->esq != NULL and aux->dir == NULL)) {
+                *p = (*p)->esq;
+            }
+            delete aux;
+        }
+    } else {
+        if ((*p)->value > x) {
+            remove(&(*p)->dir, x);
+        } else if ((*p)->value < x) {
+            remove(&(*p)->esq, x);
         }
     }
 }
